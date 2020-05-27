@@ -1,38 +1,95 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Customer;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
-class CustomerController extends Controller
-{
-    public function index(){
+class CustomerController extends Controller{
 
-        //tao mang khach hang
-        $customers = [
-            '0' => [
-                'id'  => 1,
-                'name'=> 'customer1',
-                'bod' => '1998-09-01',
-                'email' => 'customer1@gmail.com'
-            ],
+/**
+* Display a listing of the resource.
+*
+* @return Response
+*/
 
-            '1' => [
-                'id'  => 2,
-                'name'=> 'customer2',
-                'bod' => '1998-09-01',
-                'email' => 'customer2@gmail.com'
-            ],
+public function index(){
+$customers = Customer::all();
+return view('customers.list', compact('customers'));
+}
 
-            '2' => [
-                'id'  => 3,
-                'name'=> 'customer3',
-                'bod' => '1998-09-01',
-                'email' => 'customer3@gmail.com'
-            ]
-        ];
+/**
+* Show the form for creating a new resource.
+*
+* @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+*/
 
-        //goi view va truyen du lieu sang view
-        return view('customers.list', compact('customers'));
-    }
+public function create(){
+return view('customers.create');
+}
+
+/**
+* Store a newly created resource in storage.
+*
+* @return \Illuminate\Http\RedirectResponse
+*/
+public function store(Request $request){
+$customer = new Customer();
+$customer->name     = $request->input('name');
+$customer->email    = $request->input('email');
+$customer->dob      = $request->input('dob');
+$customer->save();
+
+//dung session de dua ra thong bao
+Session::flash('success', 'Tạo mới khách hàng thành công');
+//tao moi xong quay ve trang danh sach khach hang
+return redirect()->route('customers.index');
+}
+
+/**
+* Show the form for editing the specified resource.
+*
+* @param  int  $id
+* @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+*/
+public function edit($id){
+$customer = Customer::findOrFail($id);
+return view('customers.edit', compact('customer'));
+}
+
+/**
+* Update the specified resource in storage.
+*
+* @param  int  $id
+* @return \Illuminate\Http\RedirectResponse
+*/
+public function update(Request $request, $id){
+$customer = Customer::findOrFail($id);
+$customer->name     = $request->input('name');
+$customer->email    = $request->input('email');
+$customer->dob      = $request->input('dob');
+$customer->save();
+
+//dung session de dua ra thong bao
+Session::flash('success', 'Cập nhật khách hàng thành công');
+//cap nhat xong quay ve trang danh sach khach hang
+return redirect()->route('customers.index');
+}
+
+/**
+* Remove the specified resource from storage.
+*
+* @param  int  $id
+* @return \Illuminate\Http\RedirectResponse
+*/
+public function destroy($id){
+$customer = Customer::findOrFail($id);
+$customer->delete();
+
+//dung session de dua ra thong bao
+Session::flash('success', 'Xóa khách hàng thành công');
+
+//xoa xong quay ve trang danh sach khach hang
+return redirect()->route('customers.index');
+}
 }
