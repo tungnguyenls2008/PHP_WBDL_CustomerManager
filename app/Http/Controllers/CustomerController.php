@@ -17,11 +17,48 @@ class CustomerController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 
-    public function index(){
-        $customers = Customer::all();
+
+
+    public function index()
+
+    {
+
+        $customers = Customer::paginate(5);
+
         $cities = City::all();
+
         return view('customers.list', compact('customers', 'cities'));
+
     }
+
+
+    public function search(Request $request)
+
+    {
+
+        $keyword = $request->input('keyword');
+
+        if (!$keyword) {
+
+            return redirect()->route('customers.index');
+
+        }
+
+        $customers = Customer::where('name', 'LIKE', '%' . $keyword . '%')
+
+            ->paginate(5);
+
+
+        $cities = City::all();
+
+        return view('customers.list', compact('customers', 'cities'));
+
+
+    }
+
+
+
+
     public function filterByCity(Request $request){
         $idCity = $request->input('city_id');
 
