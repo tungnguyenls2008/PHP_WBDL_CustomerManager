@@ -8,4 +8,7 @@ class Customer extends Model
 {
     /* The table associated with the model */
     protected $table = 'customer';
+    public function city(){
+        return $this->belongsTo('App\City');
+    }
 }
