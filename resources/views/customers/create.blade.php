@@ -7,19 +7,19 @@
                 <h1>Thêm mới khách hàng</h1>
             </div>
             <div class="col-12">
-                <form method="post" action="{{ route('customers.store') }}">
+                <form action="{{ route('form.submit') }}" method="GET">
                     @csrf
                     <div class="form-group">
                         <label>Tên khách hàng</label>
-                        <input type="text" class="form-control" name="name"  placeholder="Enter name" required>
+                        <input type="text" class="form-control" name="name"  placeholder="Enter name" >
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                        <input type="email" class="form-control" name="email" placeholder="Enter email" >
                     </div>
                     <div class="form-group">
                         <label>Ngày sinh</label>
-                        <input type="date" class="form-control" name="dob" required>
+                        <input type="date" class="form-control" name="dob" >
                     </div>
                     <div class="form-group">
                         <label>Tỉnh thành</label>
@@ -32,6 +32,14 @@
                     <button type="submit" class="btn btn-primary">Thêm mới</button>
                     <button class="btn btn-secondary" onclick="window.history.go(-1); return false;">Hủy</button>
                 </form>
+                <div class="error-message">
+                    @if ($errors->any())
+                        @foreach($errors->all() as $nameError)
+                            <p style="color:red">{{ $nameError }}</p>
+                        @endforeach
+                    @endif
+                        <p style='color:green'>{{ (isset($success)) ? $success : '' }}</p>
+                </div>
             </div>
         </div>
     </div>

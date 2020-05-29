@@ -7,6 +7,7 @@ Route::get('/', function () {
 
 //tao group route customers
 Route::group(['prefix' => 'customers'], function () {
+    Route::get('customer-validation', 'CustomerController@checkValidation')->name('form.submit');
     Route::get('/','CustomerController@index')->name('customers.index');
     Route::get('/create','CustomerController@create')->name('customers.create');
     Route::post('/create','CustomerController@store')->name('customers.store');
